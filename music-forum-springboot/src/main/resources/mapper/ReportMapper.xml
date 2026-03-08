@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.ReportMapper">
+    <resultMap id="reportResultMap" type="org.example.springboot.entity.Report">
+        <id column="report_id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="type" property="type"/>
+        <result column="target_id" property="targetId"/>
+        <result column="reason" property="reason"/>
+        <result column="create_time" property="createTime"/>
+        <result column="handler_id" property="handlerId"/>
+        <result column="handle_time" property="handleTime"/>
+        <result column="status" property="status"/>
+        <result column="username" property="username"/>
+        <result column="handler_name" property="handlerName"/>
+        <result column="target_content" property="targetContent"/>
+    </resultMap>
+    
+    <delete id="deleteByIds">
+        DELETE FROM report WHERE report_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectReportPage" resultMap="reportResultMap">
+        SELECT 
+            r.*,
+            u1.username as username,
+            u2.username as handler_name,
+            CASE 
+                WHEN r.type = 1 THEN (SELECT title FROM post WHERE post_id = r.target_id)
+                WHEN r.type = 2 THEN (SELECT content FROM comment WHERE comment_id = r.target_id)
+                WHEN r.type = 3 THEN (SELECT resource_name FROM resource WHERE resource_id = r.target_id)
+                ELSE ''
+            END as target_content
+        FROM 
+            report r
+        LEFT JOIN 
+            user u1 ON r.user_id = u1.user_id
+        LEFT JOIN 
+            user u2 ON r.handler_id = u2.user_id
+        <where>
+            <if test="reason != null and reason != ''">
+                AND r.reason LIKE CONCAT('%', #{reason}, '%')
+            </if>
+            <if test="type != null">
+                AND r.type = #{type}
+            </if>
+            <if test="username != null and username != ''">
+                AND u1.username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="status != null">
+                AND r.status = #{status}
+            </if>
+        </where>
+        ORDER BY 
+            CASE WHEN r.status = 0 THEN 0 ELSE 1 END,
+            r.create_time DESC
+    </select>
+    
+    <select id="selectByTypeAndTargetId" resultMap="reportResultMap">
+        SELECT 
+            r.*,
+            u1.username as username,
+            u2.username as handler_name
+        FROM 
+            report r
+        LEFT JOIN 
+            user u1 ON r.user_id = u1.user_id
+        LEFT JOIN 
+            user u2 ON r.handler_id = u2.user_id
+        WHERE 
+            r.type = #{type} AND r.target_id = #{targetId}
+        ORDER BY 
+            r.create_time DESC
+    </select>
+    
+    <select id="selectByUserId" resultMap="reportResultMap">
+        SELECT 
+            r.*,
+            u1.username as username,
+            u2.username as handler_name,
+            CASE 
+                WHEN r.type = 1 THEN (SELECT title FROM post WHERE post_id = r.target_id)
+                WHEN r.type = 2 THEN (SELECT content FROM comment WHERE comment_id = r.target_id)
+                WHEN r.type = 3 THEN (SELECT resource_name FROM resource WHERE resource_id = r.target_id)
+                ELSE ''
+            END as target_content
+        FROM 
+            report r
+        LEFT JOIN 
+            user u1 ON r.user_id = u1.user_id
+        LEFT JOIN 
+            user u2 ON r.handler_id = u2.user_id
+        WHERE 
+            r.user_id = #{userId}
+        ORDER BY 
+            r.create_time DESC
+    </select>
+</mapper> 

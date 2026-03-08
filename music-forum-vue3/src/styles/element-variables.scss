@@ -1,0 +1,260 @@
+/* 只需要重写你需要的即可 */
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+
+  'primary': (
+
+    'base': #41b883,
+
+  ),
+
+  'success': (
+
+    'base': #2E7D32,
+
+  ),
+
+  'warning': (
+
+    'base': #E6A23C,
+
+  ),
+
+  'danger': (
+
+    'base': #F56C6C,
+
+  ),
+
+  'info': (
+
+    'base': #909399,
+
+  )
+
+),
+
+  $common-component-size: (
+    'large': 40px,
+    'default': 32px,
+    'small': 24px,
+  ),
+  $border-radius: (
+    'base': 8px,
+    'small': 4px,
+    'round': 20px,
+    'circle': 100%,
+  ),
+
+  // 添加卡片组件的自定义样式
+  $card: (
+    'border-color': transparent,
+    'border-radius': 12px,
+    'padding': 20px,
+    'shadow': none
+  ),
+  $tag:(
+    'border-radius': 4px
+  ),
+
+  // 添加 switch 组件的自定义样式
+  $switch: (
+    'core-border-radius': 20px,  // switch 外框的圆角
+    'button-border-radius': 100%  // switch 按钮的圆角
+  ),
+
+  // 添加对话框组件的自定义样式
+  $dialog: (
+    'border-radius': 12px,
+    'padding-primary': 24px,
+    'margin-top': 15vh
+  ),
+
+  // 添加表单相关组件的自定义样式
+  $input: (
+    'border-radius': 8px,
+    'hover-border-color': #41b883,
+    'focus-border-color': #41b883
+  ),
+  $form: (
+    'label-font-size': 14px,
+    'error-font-size': 12px
+  ),
+  
+  // 添加按钮样式
+  $button: (
+    'border-radius': 8px,
+    'hover-text-color': #ffffff,
+    'hover-bg-color': #36a070,
+    'hover-border-color': #36a070,
+    'active-text-color': #ffffff,
+    'active-bg-color': #318f66,
+    'active-border-color': #318f66
+  )
+);
+
+// 如果只是按需导入，则可以忽略以下内容。
+// 如果你想导入所有样式:
+@use "element-plus/theme-chalk/src/index.scss" as *;
+
+.el-card {
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  }
+}
+
+// 如果需要，可以在最后添加额外的 switch 样式覆盖
+.el-switch__core .el-switch__action{
+  border-radius: 50% !important;
+}
+
+// 添加 radio 样式覆盖
+.el-radio__inner {
+  border-radius: 50% !important;
+  &::after {
+    border-radius: 50% !important;
+  }
+}
+
+// 添加对话框样式覆盖
+.el-dialog {
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  
+  .el-dialog__header {
+    margin: 0;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    
+    .el-dialog__title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+  
+  .el-dialog__body {
+    padding: 24px;
+  }
+  
+  .el-dialog__footer {
+    padding: 16px 24px;
+    border-top: 1px solid #f0f0f0;
+  }
+}
+
+// 添加表单样式覆盖
+.el-form {
+  // 表单项样式
+  .el-form-item {
+    margin-bottom: 20px;
+    
+    // 表单标签样式
+    .el-form-item__label {
+      font-weight: 500;
+      color: #333;
+      padding-bottom: 8px;
+    }
+    
+    // 错误提示样式
+    .el-form-item__error {
+      padding-top: 4px;
+    }
+  }
+}
+
+// 输入框样式
+.el-input {
+  .el-input__wrapper {
+    box-shadow: 0 0 0 1px #dcdfe6 inset;
+    transition: all 0.2s;
+    border-radius: 8px !important;
+    
+    &:hover {
+      box-shadow: 0 0 0 1px #41b883 inset;
+    }
+    
+    &.is-focus {
+      box-shadow: 0 0 0 1px #41b883 inset !important;
+    }
+  }
+  
+  // 禁用状态样式
+  &.is-disabled .el-input__wrapper {
+    background-color: #f5f7fa;
+    box-shadow: 0 0 0 1px #e4e7ed inset;
+  }
+}
+
+// 按钮样式
+// .el-button {
+//   transition: all 0.3s;
+//   font-weight: 500;
+  
+//   &.is-round {
+//     border-radius: 50px !important;
+//   }
+  
+//   &.el-button--primary {
+//     &:not(.is-plain) {
+//       background: linear-gradient(90deg, #41b883, #1982c3);
+//       border: none;
+      
+//       &:hover, &:focus {
+//         opacity: 0.9;
+//         transform: translateY(-2px);
+//         background: linear-gradient(90deg, #41b883, #1982c3);
+//         border: none;
+//       }
+      
+//       &:active {
+//         opacity: 1;
+//         transform: translateY(0);
+//       }
+//     }
+//   }
+// }
+
+// 表单内按钮组样式
+.el-form-item__content {
+  .el-button + .el-button {
+    margin-left: 12px;
+  }
+}
+
+// 必填星号样式
+.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
+  color: #F56C6C;
+}
+
+// 单选框样式
+.el-radio {
+  margin-right: 15px;
+  
+  .el-radio__input.is-checked .el-radio__inner {
+    background-color: #41b883;
+    border-color: #41b883;
+  }
+  
+  .el-radio__input.is-checked + .el-radio__label {
+    color: #41b883;
+  }
+}
+
+// 复选框样式
+.el-checkbox {
+  .el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #41b883;
+    border-color: #41b883;
+  }
+  
+  .el-checkbox__input.is-checked + .el-checkbox__label {
+    color: #41b883;
+  }
+}

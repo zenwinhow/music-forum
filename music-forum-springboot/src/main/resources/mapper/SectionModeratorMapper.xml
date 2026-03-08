@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.SectionModeratorMapper">
+    <resultMap id="moderatorResultMap" type="org.example.springboot.entity.SectionModerator">
+        <id column="id" property="id"/>
+        <result column="section_id" property="sectionId"/>
+        <result column="user_id" property="userId"/>
+        <result column="appoint_time" property="appointTime"/>
+        <result column="appoint_by" property="appointBy"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="section_name" property="sectionName"/>
+        <result column="username" property="username"/>
+        <result column="real_name" property="realName"/>
+        <result column="appoint_by_name" property="appointByName"/>
+    </resultMap>
+    
+    <delete id="deleteByIds">
+        DELETE FROM section_moderator WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectModeratorPage" resultMap="moderatorResultMap">
+        SELECT 
+            sm.*, 
+            s.section_name, 
+            u.username, 
+            u.real_name,
+            u2.username as appoint_by_name
+        FROM 
+            section_moderator sm
+        LEFT JOIN 
+            section s ON sm.section_id = s.section_id
+        LEFT JOIN 
+            user u ON sm.user_id = u.user_id
+        LEFT JOIN 
+            user u2 ON sm.appoint_by = u2.user_id
+        <where>
+            <if test="sectionId != null">
+                AND sm.section_id = #{sectionId}
+            </if>
+            <if test="username != null and username != ''">
+                AND (u.username LIKE CONCAT('%', #{username}, '%') OR u.real_name LIKE CONCAT('%', #{username}, '%'))
+            </if>
+        </where>
+        ORDER BY sm.appoint_time DESC
+    </select>
+    
+    <select id="selectBySectionId" resultMap="moderatorResultMap">
+        SELECT 
+            sm.*, 
+            s.section_name, 
+            u.username, 
+            u.real_name,
+            u2.username as appoint_by_name
+        FROM 
+            section_moderator sm
+        LEFT JOIN 
+            section s ON sm.section_id = s.section_id
+        LEFT JOIN 
+            user u ON sm.user_id = u.user_id
+        LEFT JOIN 
+            user u2 ON sm.appoint_by = u2.user_id
+        WHERE 
+            sm.section_id = #{sectionId}
+        ORDER BY 
+            sm.appoint_time DESC
+    </select>
+    
+    <select id="selectByUserId" resultMap="moderatorResultMap">
+        SELECT 
+            sm.*, 
+            s.section_name, 
+            u.username, 
+            u.real_name,
+            u2.username as appoint_by_name
+        FROM 
+            section_moderator sm
+        LEFT JOIN 
+            section s ON sm.section_id = s.section_id
+        LEFT JOIN 
+            user u ON sm.user_id = u.user_id
+        LEFT JOIN 
+            user u2 ON sm.appoint_by = u2.user_id
+        WHERE 
+            sm.user_id = #{userId}
+        ORDER BY 
+            sm.appoint_time DESC
+    </select>
+</mapper> 

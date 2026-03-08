@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.PostFavoriteMapper">
+    
+    <resultMap id="favoriteWithPostMap" type="org.example.springboot.entity.PostFavorite">
+        <id column="id" property="id"/>
+        <result column="post_id" property="postId"/>
+        <result column="user_id" property="userId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="status" property="status"/>
+        <result column="title" property="postTitle"/>
+    </resultMap>
+    
+    <!-- 查询用户收藏的帖子 -->
+    <select id="selectFavoritesByUserId" resultMap="favoriteWithPostMap">
+        SELECT 
+            f.id, f.post_id, f.user_id, f.create_time, f.status, p.title
+        FROM 
+            post_favorite f
+        LEFT JOIN 
+            post p ON f.post_id = p.post_id
+        WHERE 
+            f.user_id = #{userId} AND f.status = 1 AND p.status = 1
+        ORDER BY 
+            f.create_time DESC
+    </select>
+    
+    <!-- 查询帖子是否被用户收藏 -->
+    <select id="selectFavoriteByPostIdAndUserId" resultType="org.example.springboot.entity.PostFavorite">
+        SELECT 
+            id, post_id, user_id, create_time, status
+        FROM 
+            post_favorite
+        WHERE 
+            post_id = #{postId} AND user_id = #{userId}
+        LIMIT 1
+    </select>
+    
+    <!-- 获取帖子的收藏数量 -->
+    <select id="countFavoritesByPostId" resultType="java.lang.Integer">
+        SELECT 
+            COUNT(*)
+        FROM 
+            post_favorite
+        WHERE 
+            post_id = #{postId} AND status = 1
+    </select>
+</mapper> 

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.PostMapper">
+    <resultMap id="postResultMap" type="org.example.springboot.entity.Post">
+        <id column="post_id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="section_id" property="sectionId"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="view_count" property="viewCount"/>
+        <result column="is_essence" property="isEssence"/>
+        <result column="status" property="status"/>
+        <result column="username" property="username"/>
+        <result column="section_name" property="sectionName"/>
+    </resultMap>
+    
+    <delete id="deleteByIds">
+        DELETE FROM post WHERE post_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectPostPage" resultMap="postResultMap">
+        SELECT 
+            p.*,
+            u.username,
+            s.section_name
+        FROM 
+            post p
+        LEFT JOIN 
+            user u ON p.user_id = u.user_id
+        LEFT JOIN 
+            section s ON p.section_id = s.section_id
+        <where>
+            <if test="title != null and title != ''">
+                AND p.title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="userId != null">
+                AND p.user_id = #{userId}
+            </if>
+            <if test="sectionId != null">
+                AND p.section_id = #{sectionId}
+            </if>
+            <if test="isEssence != null">
+                AND p.is_essence = #{isEssence}
+            </if>
+            <if test="status != null">
+                AND p.status = #{status}
+            </if>
+        </where>
+        ORDER BY p.create_time DESC
+    </select>
+    
+    <select id="selectByUserId" resultMap="postResultMap">
+        SELECT 
+            p.*,
+            u.username,
+            s.section_name
+        FROM 
+            post p
+        LEFT JOIN 
+            user u ON p.user_id = u.user_id
+        LEFT JOIN 
+            section s ON p.section_id = s.section_id
+        WHERE 
+            p.user_id = #{userId}
+        ORDER BY 
+            p.create_time DESC
+    </select>
+    
+    <select id="selectBySectionId" resultMap="postResultMap">
+        SELECT 
+            p.*,
+            u.username,
+            s.section_name
+        FROM 
+            post p
+        LEFT JOIN 
+            user u ON p.user_id = u.user_id
+        LEFT JOIN 
+            section s ON p.section_id = s.section_id
+        WHERE 
+            p.section_id = #{sectionId}
+        ORDER BY 
+            p.create_time DESC
+    </select>
+</mapper> 

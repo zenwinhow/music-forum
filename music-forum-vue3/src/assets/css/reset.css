@@ -1,0 +1,17 @@
+/* 全局重置样式 */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+#app {
+  height: 100%;
+  overflow: auto;
+} 
