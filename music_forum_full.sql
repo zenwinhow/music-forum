@@ -192,9 +192,9 @@ CREATE TABLE `section_moderator` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `user` VALUES
-(1, 'admin', '123456', 'System Admin', 1, 'admin@musicforum.local', '13800000000', '/avatars/default.png', 'Forum admin', 'Administrator account', 'pop,rock,electronic', '2026-03-01 09:00:00', '2026-03-01 09:00:00', 1),
-(2, 'demo_user', '123456', 'Demo User', 2, 'demo@musicforum.local', '13900000001', '/avatars/default.png', 'Music all day', 'Demo account for presentation', 'jpop,indie,study', '2026-03-01 09:10:00', '2026-03-01 09:10:00', 1),
-(3, 'music_lover', '123456', 'Music Lover', 2, 'lover@musicforum.local', '13700000002', '/avatars/default.png', 'Loop playlist', 'Second demo account', 'late-night,chill', '2026-03-01 09:20:00', '2026-03-01 09:20:00', 1);
+(1, 'admin', '$2a$10$6e70YJTCnUGC3FB3dtDz.OPMk5bIwTf3CJ0iOL1AbduDMAKo82KWu', 'System Admin', 1, 'admin@musicforum.local', '13800000000', '/avatars/default.png', 'Forum admin', 'Administrator account', 'pop,rock,electronic', '2026-03-01 09:00:00', '2026-03-01 09:00:00', 1),
+(2, 'demo_user', '$2a$10$6e70YJTCnUGC3FB3dtDz.OPMk5bIwTf3CJ0iOL1AbduDMAKo82KWu', 'Demo User', 2, 'demo@musicforum.local', '13900000001', '/avatars/default.png', 'Music all day', 'Demo account for presentation', 'jpop,indie,study', '2026-03-01 09:10:00', '2026-03-01 09:10:00', 1),
+(3, 'music_lover', '$2a$10$6e70YJTCnUGC3FB3dtDz.OPMk5bIwTf3CJ0iOL1AbduDMAKo82KWu', 'Music Lover', 2, 'lover@musicforum.local', '13700000002', '/avatars/default.png', 'Loop playlist', 'Second demo account', 'late-night,chill', '2026-03-01 09:20:00', '2026-03-01 09:20:00', 1);
 
 INSERT INTO `section` VALUES
 (1, 'Pop', 'Popular songs and trending tracks', '2026-03-01 10:00:00', '2026-03-01 10:00:00', 1),
