@@ -9,6 +9,7 @@
       <nav class="main-nav">
         <router-link to="/home" class="nav-link">首页</router-link>
         <router-link to="/sections" class="nav-link">音乐分类</router-link>
+        <router-link to="/resources" class="nav-link">资源中心</router-link>
         <router-link to="/forum/create-post" class="nav-link">发布分享</router-link>
         <router-link to="/forum/search" class="nav-link">搜索</router-link>
       </nav>
