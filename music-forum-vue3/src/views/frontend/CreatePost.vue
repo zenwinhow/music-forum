@@ -81,5 +81,40 @@ onMounted(loadSections)
 </script>
 
 <style scoped>
-.create-post-container{max-width:900px;margin:0 auto;padding:20px;background:#111827;color:#e5e7eb;border-radius:12px}
+.create-post-container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #0f172a, #1e293b);
+  color: #e5e7eb;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.25);
+}
+
+.create-post-container h2 {
+  margin: 0 0 18px;
+  color: #f8fafc;
+}
+
+.create-post-container :deep(.el-form-item__label) {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.create-post-container :deep(.el-input__wrapper),
+.create-post-container :deep(.el-textarea__inner),
+.create-post-container :deep(.el-select__wrapper) {
+  background: #ffffff;
+  color: #111827;
+}
+
+.create-post-container :deep(.el-input__inner),
+.create-post-container :deep(.el-textarea__inner) {
+  color: #111827;
+}
+
+.create-post-container :deep(.el-input__inner::placeholder),
+.create-post-container :deep(.el-textarea__inner::placeholder) {
+  color: #64748b;
+}
 </style>
