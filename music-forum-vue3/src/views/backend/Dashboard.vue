@@ -470,17 +470,17 @@ const getResourceIconClass = (fileType) => {
 
 // 查看帖子详情
 const viewPost = (post) => {
-  router.push(`/back/post/${post.id}`)
+  router.push(`/forum/post/${post.id}`)
 }
 
 // 跳转到帖子列表
 const goToPostList = () => {
-  router.push('/back/posts')
+  router.push('/back/post/list')
 }
 
 // 跳转到资源列表
 const goToResourceList = () => {
-  router.push('/back/resources')
+  router.push('/back/resource/list')
 }
 
 // 窗口大小改变时重新渲染图表
