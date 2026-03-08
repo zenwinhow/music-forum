@@ -71,13 +71,16 @@ public class PostController {
     @GetMapping("/page")
     public Result<?> getPostsByPage(
             @RequestParam(required = false) String title,
+            @RequestParam(required = false) String songName,
+            @RequestParam(required = false) String artist,
+            @RequestParam(required = false) String tags,
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) Long sectionId,
             @RequestParam(required = false) Integer isEssence,
             @RequestParam(required = false) Integer status,
             @RequestParam(defaultValue = "1") Integer currentPage,
             @RequestParam(defaultValue = "10") Integer size) {
-        Page<Post> page = postService.getPostsByPage(title, userId, sectionId, isEssence, status, currentPage, size);
+        Page<Post> page = postService.getPostsByPage(title, songName, artist, tags, userId, sectionId, isEssence, status, currentPage, size);
         return Result.success(page);
     }
 

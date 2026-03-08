@@ -33,6 +33,9 @@ public class SearchService {
         // 搜索帖子（限制5条）
         Page<Post> posts = postService.getPostsByPage(
             keyword,
+            keyword,
+            keyword,
+            keyword,
             null,
             null,
             null,
@@ -70,6 +73,9 @@ public class SearchService {
         if (type == null || type.equals("all") || type.equals("post")) {
             // 搜索帖子
             Page<Post> posts = postService.getPostsByPage(
+                keyword,
+                keyword,
+                keyword,
                 keyword,
                 null,
                 null,

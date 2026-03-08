@@ -18,6 +18,9 @@ public interface PostMapper extends BaseMapper<Post> {
     // 查询帖子列表（包含用户和版区信息）
     Page<Post> selectPostPage(Page<Post> page, 
                               @Param("title") String title,
+                              @Param("songName") String songName,
+                              @Param("artist") String artist,
+                              @Param("tags") String tags,
                               @Param("userId") Long userId,
                               @Param("sectionId") Long sectionId,
                               @Param("isEssence") Integer isEssence,

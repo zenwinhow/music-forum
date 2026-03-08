@@ -52,6 +52,9 @@ public class User {
     
     @Schema(description = "个人简介")
     private String profile;
+
+    @Schema(description = "music preferences")
+    private String musicPreferences;
     
     @Schema(description = "创建时间")
     private Date createTime;
