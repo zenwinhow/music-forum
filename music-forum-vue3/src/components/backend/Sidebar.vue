@@ -42,8 +42,46 @@ const getMenuTitle = (menu) => menu.meta?.title || menu.name || '菜单'
 </script>
 
 <style scoped>
-.sidebar-container{height:100%;background:#0f172a;color:#fff;width:220px}
-.sidebar-container.is-collapsed{width:64px}
-.logo{height:60px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #334155}
-.sidebar-menu{border:none;height:calc(100% - 60px)}
+.sidebar-container {
+  height: 100%;
+  background: #0f172a;
+  color: #fff;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-container.is-collapsed {
+  width: 64px;
+}
+
+.logo {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #334155;
+  flex-shrink: 0;
+}
+
+.sidebar-menu {
+  border: none;
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 8px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.7);
+}
 </style>
