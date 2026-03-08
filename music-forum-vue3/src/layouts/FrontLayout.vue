@@ -28,8 +28,6 @@ const isLoggedIn = computed(() => userStore.isLoggedIn)
 
 // 用户角色信息
 const isAdmin = computed(() => userStore.isAdmin)
-const isTeacher = computed(() => userStore.isTeacher)
-const isStudent = computed(() => userStore.isStudent)
 
 // 用户信息
 const userInfo = computed(() => userStore.userInfo)

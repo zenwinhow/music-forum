@@ -105,7 +105,7 @@ export function forgetPassword(email, newPassword) {
 
 /**
  * 根据角色获取用户
- * @param {Number} role 角色（1-管理员，2-教师，3-学生）
+ * @param {Number} role 角色（1-管理员，2-用户）
  * @returns {Promise} 返回Promise对象
  */
 export function getUsersByRole(role) {

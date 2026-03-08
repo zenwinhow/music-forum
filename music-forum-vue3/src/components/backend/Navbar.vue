@@ -5,18 +5,18 @@
         <component :is="appStore.sidebarCollapsed ? Expand : Fold" />
       </el-icon>
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/back/dashboard' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/back/dashboard' }">后台管理</el-breadcrumb-item>
         <el-breadcrumb-item>{{ route.meta.title }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    
+
     <div class="right-menu">
       <div class="right-menu-item" @click="toggleFullScreen">
         <el-icon :size="20">
           <component :is="isFullscreen ? Aim : FullScreen" />
         </el-icon>
       </div>
-      
+
       <el-dropdown trigger="click">
         <div class="avatar-wrapper">
           <el-avatar :size="32" :src="'/api' + userInfo?.avatar">
@@ -67,11 +67,9 @@ const toggleFullScreen = () => {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen()
     isFullscreen.value = true
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen()
-      isFullscreen.value = false
-    }
+  } else if (document.exitFullscreen) {
+    document.exitFullscreen()
+    isFullscreen.value = false
   }
 }
 
@@ -96,105 +94,65 @@ const handleLogout = async () => {
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  background: #ffffff;
+  color: #e5e7eb;
 
   .left-menu {
     display: flex;
     align-items: center;
     gap: 16px;
+  }
 
-    .hamburger {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 4px;
-      color: #666;
-      height: 32px;
-      width: 32px;
-      
-      &:hover {
-        background: #f6f6f6;
-      }
-    }
+  .hamburger {
+    cursor: pointer;
+    color: #e5e7eb;
+    padding: 8px;
+    border-radius: 6px;
 
-    :deep(.el-breadcrumb__inner) {
-      color: #666;
-      line-height: 32px;
-      
-      &.is-link {
-        color: #999;
-        
-        &:hover {
-          color: #409EFF;
-        }
-      }
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
     }
+  }
+
+  :deep(.el-breadcrumb__inner) {
+    color: #e5e7eb;
   }
 
   .right-menu {
     display: flex;
     align-items: center;
     gap: 8px;
-
-    .right-menu-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #666;
-      border-radius: 4px;
-      transition: all 0.3s;
-      height: 32px;
-      width: 32px;
-      
-      &:hover {
-        background: #f6f6f6;
-        color: #333;
-      }
-    }
-    
-    .avatar-wrapper {
-      display: flex;
-      align-items: center;
-      padding: 4px 8px;
-      height: 32px;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.3s;
-      
-      &:hover {
-        background: #f6f6f6;
-      }
-      
-      .user-name {
-        margin: 0 8px;
-        font-size: 14px;
-        color: #666;
-        line-height: 32px;
-      }
-
-      .el-icon {
-        color: #999;
-        display: flex;
-        align-items: center;
-      }
-    }
   }
 
-  :deep(.el-dropdown-menu__item) {
+  .right-menu-item {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    height: 40px;
-    
-    .el-icon {
-      margin-right: 4px;
-      display: flex;
-      align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
     }
   }
+
+  .avatar-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+  }
+
+  .user-name {
+    margin: 0 8px;
+    color: #e5e7eb;
+    font-size: 14px;
+  }
 }
-</style> 
+</style>

@@ -17,8 +17,7 @@
             style="width: 200px"
           >
             <el-option :value="1" label="管理员" />
-            <el-option :value="2" label="教师" />
-            <el-option :value="3" label="学生" />
+            <el-option :value="2" label="用户" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -112,8 +111,7 @@
         <el-form-item label="角色" prop="role">
           <el-select v-model="userForm.role" placeholder="请选择角色" style="width: 100%">
             <el-option :value="1" label="管理员" />
-            <el-option :value="2" label="教师" />
-            <el-option :value="3" label="学生" />
+            <el-option :value="2" label="用户" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -200,7 +198,7 @@ const userForm = reactive({
   realName: '',
   email: '',
   phone: '',
-  role: 3,
+  role: 2,
   status: 1,
   password: ''
 })
@@ -280,9 +278,7 @@ const getRoleName = (role) => {
     case 1:
       return '管理员'
     case 2:
-      return '教师'
-    case 3:
-      return '学生'
+      return '用户'
     default:
       return '未知'
   }
@@ -295,8 +291,6 @@ const getRoleTagType = (role) => {
       return 'danger'
     case 2:
       return 'success'
-    case 3:
-      return 'info'
     default:
       return 'info'
   }
@@ -363,7 +357,7 @@ const handleAdd = () => {
   userForm.realName = ''
   userForm.email = ''
   userForm.phone = ''
-  userForm.role = 3
+  userForm.role = 2
   userForm.status = 1
   userForm.password = ''
   dialogVisible.value = true

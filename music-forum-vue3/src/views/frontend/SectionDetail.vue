@@ -729,8 +729,7 @@ const showModeratorDetail = (moderator) => {
 const getRoleLabel = (role) => {
   const roleMap = {
     1: '管理员',
-    2: '教师',
-    3: '学生'
+    2: '用户'
   }
   return roleMap[role] || '未知'
 }
