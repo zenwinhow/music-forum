@@ -14,6 +14,7 @@
         </el-table-column>
         <el-table-column label="操作" width="120">
           <template #default="{ row }">
+            <el-button type="primary" link @click="openEdit(row)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -48,6 +49,13 @@ const changeStatus = async (id, status) => {
 }
 
 const openAdd = () => { form.id = null; form.sectionName = ''; form.description = ''; form.status = 1; dialog.value = true }
+const openEdit = (row) => {
+  form.id = row.id
+  form.sectionName = row.sectionName
+  form.description = row.description
+  form.status = row.status
+  dialog.value = true
+}
 
 const save = async () => {
   if (form.id) await request.put(`/section/${form.id}`, form, { showDefaultMsg: false })
