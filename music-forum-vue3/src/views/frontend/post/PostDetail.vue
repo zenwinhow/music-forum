@@ -9,6 +9,7 @@
       <div class="content" v-html="post.content"></div>
       <div class="actions">
         <el-button :icon="post.isFavorited ? StarFilled : Star" @click="handleFavorite">{{ post.isFavorited ? '已收藏' : '收藏这首歌/这篇分享' }}</el-button>
+        <el-button type="danger" plain @click="handleReport">举报</el-button>
       </div>
     </el-card>
 
@@ -18,6 +19,14 @@
       <el-button type="primary" @click="submitComment" :loading="submitting" style="margin-top:10px">发表评论</el-button>
       <div v-for="c in comments" :key="c.id" class="comment-item">{{ c.userName || c.username }}：{{ c.content }}</div>
     </el-card>
+
+    <report-dialog
+      v-model:visible="reportDialogVisible"
+      :type="1"
+      :target-id="Number(route.params.id)"
+      :title="post.songName || post.title || '该帖子'"
+      @success="onReportSuccess"
+    />
   </div>
 </template>
 
@@ -27,12 +36,14 @@ import { useRoute } from 'vue-router'
 import { Star, StarFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import request from '@/utils/request'
+import ReportDialog from '@/components/common/ReportDialog.vue'
 
 const route = useRoute()
 const post = ref({})
 const comments = ref([])
 const commentContent = ref('')
 const submitting = ref(false)
+const reportDialogVisible = ref(false)
 
 const fetchPost = async () => {
   await request.get(`/post/${route.params.id}`, null, {
@@ -69,6 +80,14 @@ const handleFavorite = async () => {
 const openMusic = () => {
   if (post.value.musicUrl) window.open(post.value.musicUrl, '_blank')
   else ElMessage.warning('暂无音乐链接')
+}
+
+const handleReport = () => {
+  reportDialogVisible.value = true
+}
+
+const onReportSuccess = () => {
+  ElMessage.success('举报提交成功')
 }
 
 onMounted(() => {
