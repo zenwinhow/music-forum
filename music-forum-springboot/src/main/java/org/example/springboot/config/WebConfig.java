@@ -103,6 +103,7 @@ public class WebConfig implements WebMvcConfigurer {
         // 普通文件资源
         String commonFolderPath = projectRootPath.resolve("common").toAbsolutePath().toString();
         registry.addResourceHandler("/api/common/**").addResourceLocations("file:" + commonFolderPath + "/");
+        registry.addResourceHandler("/common/**").addResourceLocations("file:" + commonFolderPath + "/");
         
         // Swagger和API文档资源
         registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");

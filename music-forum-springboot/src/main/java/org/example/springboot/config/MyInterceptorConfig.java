@@ -45,6 +45,7 @@ public class MyInterceptorConfig implements WebMvcConfigurer {
         // 添加对common文件夹的静态资源映射
         String commonFolderPath = projectRootPath.resolve("common").toAbsolutePath().toString();
         registry.addResourceHandler("/api/common/**").addResourceLocations("file:" + commonFolderPath + "/");
+        registry.addResourceHandler("/common/**").addResourceLocations("file:" + commonFolderPath + "/");
 
         registry.addResourceHandler("doc.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
