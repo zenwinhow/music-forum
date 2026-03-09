@@ -12,6 +12,11 @@
         <el-table-column label="状态" width="110">
           <template #default="{row}"><el-switch v-model="row.status" :active-value="1" :inactive-value="0" @change="v=>changeStatus(row.id,v)"/></template>
         </el-table-column>
+        <el-table-column label="操作" width="120">
+          <template #default="{ row }">
+            <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
 
@@ -27,6 +32,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
+import { ElMessageBox } from 'element-plus'
 import request from '@/utils/request'
 
 const tableData = ref([])
@@ -48,6 +54,20 @@ const save = async () => {
   else await request.post('/section/add', form, { showDefaultMsg: false })
   dialog.value = false
   load()
+}
+
+const handleDelete = async (row) => {
+  try {
+    await ElMessageBox.confirm(`确认删除分类「${row.sectionName}」吗？`, '提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+    await request.delete(`/section/${row.id}`, { successMsg: '删除成功' })
+    load()
+  } catch (e) {
+    // 用户取消删除时不处理
+  }
 }
 
 onMounted(load)
