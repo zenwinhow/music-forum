@@ -431,6 +431,7 @@ public class UserService {
         user.setSignature(profileUpdate.getSignature());
         user.setAvatar(profileUpdate.getAvatar());
         user.setProfile(profileUpdate.getProfile());
+        user.setMusicPreferences(profileUpdate.getMusicPreferences());
         user.setUpdateTime(new Date());
         
         if (userMapper.updateById(user) <= 0) {

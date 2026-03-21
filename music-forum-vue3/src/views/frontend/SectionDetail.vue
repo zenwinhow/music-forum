@@ -729,8 +729,7 @@ const showModeratorDetail = (moderator) => {
 const getRoleLabel = (role) => {
   const roleMap = {
     1: '管理员',
-    2: '教师',
-    3: '学生'
+    2: '用户'
   }
   return roleMap[role] || '未知'
 }
@@ -887,15 +886,28 @@ onMounted(() => {
     top: 0;
     left: 0;
     width: 100%;
-    height: 120px;
+    height: 220px;
     z-index: 0;
+    filter: saturate(1.05);
+  }
+
+  .card-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.12) 0%,
+      rgba(0, 0, 0, 0.26) 100%
+    );
   }
 }
 
 .section-header {
   display: flex;
   align-items: flex-start;
-  padding: 30px;
+  padding: 30px 30px 64px;
+  min-height: 220px;
   position: relative;
   z-index: 1;
   

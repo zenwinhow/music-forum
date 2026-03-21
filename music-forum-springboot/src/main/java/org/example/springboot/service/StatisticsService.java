@@ -95,11 +95,8 @@ public class StatisticsService {
         LambdaQueryWrapper<User> adminQuery = new LambdaQueryWrapper<User>().eq(User::getRole, 1);
         long adminCount = userMapper.selectCount(adminQuery);
         
-        LambdaQueryWrapper<User> teacherQuery = new LambdaQueryWrapper<User>().eq(User::getRole, 2);
-        long teacherCount = userMapper.selectCount(teacherQuery);
-        
-        LambdaQueryWrapper<User> studentQuery = new LambdaQueryWrapper<User>().eq(User::getRole, 3);
-        long studentCount = userMapper.selectCount(studentQuery);
+        LambdaQueryWrapper<User> normalUserQuery = new LambdaQueryWrapper<User>().eq(User::getRole, 2);
+        long normalUserCount = userMapper.selectCount(normalUserQuery);
         
         // 用户活跃度（基于发帖量）
         List<Map<String, Object>> activeUsers = userMapper.selectUserActivityByPostCount(10);
@@ -107,8 +104,7 @@ public class StatisticsService {
         // 添加到结果中
         userStats.put("totalUsers", totalUsers);
         userStats.put("adminCount", adminCount);
-        userStats.put("teacherCount", teacherCount);
-        userStats.put("studentCount", studentCount);
+        userStats.put("userCount", normalUserCount);
         userStats.put("activeUsers", activeUsers);
         
         // 最近注册的用户

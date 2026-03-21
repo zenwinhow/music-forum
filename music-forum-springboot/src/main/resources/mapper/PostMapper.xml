@@ -7,6 +7,13 @@
         <result column="section_id" property="sectionId"/>
         <result column="title" property="title"/>
         <result column="content" property="content"/>
+        <result column="song_name" property="songName"/>
+        <result column="artist" property="artist"/>
+        <result column="album" property="album"/>
+        <result column="genre" property="genre"/>
+        <result column="tags" property="tags"/>
+        <result column="cover_url" property="coverUrl"/>
+        <result column="music_url" property="musicUrl"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="view_count" property="viewCount"/>
@@ -36,7 +43,21 @@
             section s ON p.section_id = s.section_id
         <where>
             <if test="title != null and title != ''">
-                AND p.title LIKE CONCAT('%', #{title}, '%')
+                AND (
+                    p.title LIKE CONCAT('%', #{title}, '%')
+                    OR p.song_name LIKE CONCAT('%', #{title}, '%')
+                    OR p.artist LIKE CONCAT('%', #{title}, '%')
+                    OR p.tags LIKE CONCAT('%', #{title}, '%')
+                )
+            </if>
+            <if test="songName != null and songName != ''">
+                AND p.song_name LIKE CONCAT('%', #{songName}, '%')
+            </if>
+            <if test="artist != null and artist != ''">
+                AND p.artist LIKE CONCAT('%', #{artist}, '%')
+            </if>
+            <if test="tags != null and tags != ''">
+                AND p.tags LIKE CONCAT('%', #{tags}, '%')
             </if>
             <if test="userId != null">
                 AND p.user_id = #{userId}

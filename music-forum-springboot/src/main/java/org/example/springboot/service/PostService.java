@@ -50,6 +50,13 @@ public class PostService {
         post.setSectionId(postDTO.getSectionId());
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
+        post.setSongName(postDTO.getSongName());
+        post.setArtist(postDTO.getArtist());
+        post.setAlbum(postDTO.getAlbum());
+        post.setGenre(postDTO.getGenre());
+        post.setTags(postDTO.getTags());
+        post.setCoverUrl(postDTO.getCoverUrl());
+        post.setMusicUrl(postDTO.getMusicUrl());
         post.setCreateTime(new Date());
         post.setViewCount(0);
         post.setIsEssence(postDTO.getIsEssence() != null ? postDTO.getIsEssence() : 0);
@@ -83,6 +90,13 @@ public class PostService {
         post.setSectionId(postDTO.getSectionId());
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
+        post.setSongName(postDTO.getSongName());
+        post.setArtist(postDTO.getArtist());
+        post.setAlbum(postDTO.getAlbum());
+        post.setGenre(postDTO.getGenre());
+        post.setTags(postDTO.getTags());
+        post.setCoverUrl(postDTO.getCoverUrl());
+        post.setMusicUrl(postDTO.getMusicUrl());
         post.setUpdateTime(new Date());
         post.setIsEssence(postDTO.getIsEssence());
         post.setStatus(postDTO.getStatus());
@@ -98,7 +112,7 @@ public class PostService {
      */
     public List<Post> getPostList() {
         Page<Post> page = new Page<>(1, Integer.MAX_VALUE);
-        Page<Post> postPage = postMapper.selectPostPage(page, null, null, null, null, null);
+        Page<Post> postPage = postMapper.selectPostPage(page, null, null, null, null, null, null, null, null);
         List<Post> records = postPage.getRecords();
         records.forEach(this::fillUserAndSectionInfo);
         return records;
@@ -106,7 +120,7 @@ public class PostService {
 
     public Page<Post> getPostByViewCount() {
         Page<Post> page = new Page<>(1, Integer.MAX_VALUE);
-        Page<Post> postPage = postMapper.selectPostPage(page, null, null, null, null, null);
+        Page<Post> postPage = postMapper.selectPostPage(page, null, null, null, null, null, null, null, null);
         List<Post> records = postPage.getRecords();
         records.sort((o1, o2) -> o2.getViewCount().compareTo(o1.getViewCount()));
         records.forEach(this::fillUserAndSectionInfo);
@@ -126,9 +140,9 @@ public class PostService {
      * @param size 每页记录数
      * @return 分页结果
      */
-    public Page<Post> getPostsByPage(String title, Long userId, Long sectionId, Integer isEssence, Integer status, Integer currentPage, Integer size) {
+    public Page<Post> getPostsByPage(String title, String songName, String artist, String tags, Long userId, Long sectionId, Integer isEssence, Integer status, Integer currentPage, Integer size) {
         Page<Post> page = new Page<>(currentPage, size);
-        Page<Post> postPage = postMapper.selectPostPage(page, title, userId, sectionId, isEssence, status);
+        Page<Post> postPage = postMapper.selectPostPage(page, title, songName, artist, tags, userId, sectionId, isEssence, status);
         postPage.getRecords().forEach(this::fillUserAndSectionInfo);
 
         return postPage;

@@ -21,6 +21,27 @@ public class PostDTO {
     @Schema(description = "帖子内容")
     @NotBlank(message = "帖子内容不能为空")
     private String content;
+
+    @Schema(description = "song name")
+    private String songName;
+
+    @Schema(description = "artist")
+    private String artist;
+
+    @Schema(description = "album")
+    private String album;
+
+    @Schema(description = "genre")
+    private String genre;
+
+    @Schema(description = "tags")
+    private String tags;
+
+    @Schema(description = "cover image url")
+    private String coverUrl;
+
+    @Schema(description = "music external url")
+    private String musicUrl;
     
     @Schema(description = "是否精华（0-否，1-是）")
     private Integer isEssence;

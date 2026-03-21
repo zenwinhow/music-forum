@@ -26,4 +26,8 @@ public class UserProfileUpdateDTO {
     @Schema(description = "个人简介")
     @Size(max = 500, message = "个人简介长度不能超过500个字符")
     private String profile;
+
+    @Schema(description = "music preferences")
+    @Size(max = 500, message = "music preferences too long")
+    private String musicPreferences;
 } 

@@ -426,10 +426,21 @@ const handleDownload = (row) => {
     showDefaultMsg: false
   })
   
-  // 执行下载操作
+  const rawPath = row.filePath || ''
+  if (!rawPath) {
+    ElMessage.warning('下载地址为空')
+    return
+  }
+
+  const fileName = rawPath.split('/').filter(Boolean).pop()
+  if (!fileName) {
+    ElMessage.warning('下载地址无效')
+    return
+  }
+
+  const downloadUrl = `http://localhost:8080/api/resources/${encodeURIComponent(fileName)}`
   ElMessage.success(`开始下载: ${row.resourceName}`)
-  // TODO: 实现下载功能
-  window.open(row.filePath, '_blank')
+  window.open(downloadUrl, '_blank')
 }
 
 // 文件上传相关处理

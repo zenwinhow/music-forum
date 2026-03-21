@@ -1,419 +1,72 @@
-<template>
+﻿<template>
   <div class="search-page">
-    <div class="search-header">
-      <div class="search-container">
-        <el-input
-          v-model="keyword"
-          placeholder="搜索帖子、资源..."
-          clearable
-          class="search-input"
-          size="large"
-          @keyup.enter="handleSearch"
-        >
-          <template #prefix>
-            <el-icon><Search /></el-icon>
-          </template>
-        </el-input>
-        <div class="search-options">
-          <el-radio-group v-model="searchType" @change="handleSearch">
-            <el-radio-button label="all">全部</el-radio-button>
-            <el-radio-button label="post">帖子</el-radio-button>
-            <el-radio-button label="resource">资源</el-radio-button>
-          </el-radio-group>
-        </div>
-      </div>
-    </div>
+    <el-card>
+      <el-form :inline="true">
+        <el-form-item><el-input v-model="form.keyword" placeholder="关键词(标题/歌曲名/歌手/标签)" @keyup.enter="search" /></el-form-item>
+        <el-form-item><el-input v-model="form.songName" placeholder="歌曲名" /></el-form-item>
+        <el-form-item><el-input v-model="form.artist" placeholder="歌手" /></el-form-item>
+        <el-form-item><el-input v-model="form.tags" placeholder="标签" /></el-form-item>
+        <el-form-item>
+          <el-select v-model="form.sectionId" clearable placeholder="分类" style="width:180px">
+            <el-option v-for="s in sections" :key="s.id" :label="s.sectionName" :value="s.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item><el-button type="primary" @click="search">搜索</el-button></el-form-item>
+      </el-form>
+    </el-card>
 
-    <div class="search-results" v-loading="loading">
-      <!-- 帖子搜索结果 -->
-      <div class="result-section" v-if="searchType === 'all' || searchType === 'post'">
-        <h2>帖子</h2>
-        <div class="posts-list" v-if="posts.records && posts.records.length > 0">
-          <div v-for="post in posts.records" :key="post.id" class="post-card">
-            <div class="post-meta">
-              <el-avatar :src="'/api' + post.user?.avatar" :size="40">
-                {{ post.user?.username?.charAt(0) }}
-              </el-avatar>
-              <div class="post-info">
-                <span class="author">{{ post.user?.username }}</span>
-                <span class="time">{{ formatDate(post.createTime) }}</span>
-              </div>
-            </div>
-            <router-link :to="`/forum/post/${post.id}`" class="post-content">
-              <h3>{{ post.title }}</h3>
-              <p>{{ post.content.substring(0, 200) }}...</p>
-            </router-link>
-            <div class="post-stats">
-              <span><el-icon><View /></el-icon> {{ post.viewCount }}</span>
-              <span><el-icon><ChatLineRound /></el-icon> {{ post.commentCount }}</span>
-            </div>
-          </div>
-          <el-pagination
-            v-if="posts.total > 10"
-            :current-page="currentPage"
-            :page-size="pageSize"
-            :total="posts.total"
-            @current-change="handlePageChange"
-            layout="prev, pager, next"
-            background
-          />
+    <el-card style="margin-top:12px">
+      <div v-for="p in posts" :key="p.id" class="item" @click="$router.push(`/forum/post/${p.id}`)">
+        <img v-if="p.coverUrl" :src="p.coverUrl" class="cover" />
+        <div>
+          <h3>{{ p.songName || p.title }}</h3>
+          <p>{{ p.artist }} · {{ p.genre }} · {{ p.tags }}</p>
         </div>
-        <el-empty v-else description="暂无相关帖子" />
       </div>
-
-      <!-- 资源搜索结果 -->
-      <div class="result-section" v-if="searchType === 'all' || searchType === 'resource'">
-        <h2>资源</h2>
-        <div class="resources-grid" v-if="resources.records && resources.records.length > 0">
-          <div v-for="resource in resources.records" :key="resource.id" class="resource-card">
-            <div class="resource-icon">
-              <el-icon>
-                <component :is="getResourceIcon(resource.fileType)" />
-              </el-icon>
-            </div>
-            <div class="resource-info">
-              <h3>{{ resource.resourceName }}</h3>
-              <p>{{ resource.description || '暂无描述' }}</p>
-              <div class="resource-meta">
-                <span>{{ formatFileSize(resource.fileSize * 1024) }}</span>
-                <span>{{ formatDate(resource.createTime) }}</span>
-              </div>
-            </div>
-          </div>
-          <el-pagination
-            v-if="resources.total > 10"
-            :current-page="currentPage"
-            :page-size="pageSize"
-            :total="resources.total"
-            @current-change="handlePageChange"
-            layout="prev, pager, next"
-            background
-          />
-        </div>
-        <el-empty v-else description="暂无相关资源" />
-      </div>
-    </div>
+      <el-empty v-if="posts.length===0" description="暂无结果" />
+      <el-pagination :current-page="currentPage" :page-size="size" :total="total" @current-change="onPage" layout="prev, pager, next" />
+    </el-card>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { Search, View, ChatLineRound, Document, Tickets, Picture, VideoPlay, Files } from '@element-plus/icons-vue'
+import { useRoute } from 'vue-router'
 import request from '@/utils/request'
 
 const route = useRoute()
-const router = useRouter()
-
-const keyword = ref('')
-const searchType = ref('all')
+const form = ref({ keyword: route.query.keyword || '', songName: '', artist: '', tags: '', sectionId: null })
+const sections = ref([])
+const posts = ref([])
 const currentPage = ref(1)
-const pageSize = ref(10)
-const loading = ref(false)
+const size = ref(10)
+const total = ref(0)
 
-const posts = ref({ records: [], total: 0 })
-const resources = ref({ records: [], total: 0 })
-
-// 初始化搜索参数
-onMounted(() => {
-  if (route.query.keyword) {
-    keyword.value = route.query.keyword
-    searchType.value = route.query.type || 'all'
-    handleSearch()
-  }
-})
-
-// 处理搜索
-const handleSearch = async () => {
-  if (!keyword.value.trim()) {
-    return
-  }
-
-  loading.value = true
-  try {
-    const response = await request.get('/search', {
-      keyword: keyword.value,
-      type: searchType.value,
-      currentPage: currentPage.value,
-      size: pageSize.value
-    }, {
-      showDefaultMsg: false,
-      onSuccess: (data) => {
-        if (data.posts) {
-          posts.value = data.posts
-        }
-        if (data.resources) {
-          resources.value = data.resources
-        }
-        
-        // 更新URL参数
-        router.push({
-          query: {
-            keyword: keyword.value,
-            type: searchType.value
-          }
-        })
-      }
-    })
-  } catch (error) {
-    console.error('搜索失败:', error)
-  } finally {
-    loading.value = false
-  }
+const loadSections = async () => {
+  await request.get('/section/all', { status: 1 }, { showDefaultMsg: false, onSuccess: (res) => sections.value = res || [] })
 }
 
-// 处理分页
-const handlePageChange = (page) => {
-  currentPage.value = page
-  handleSearch()
+const search = async () => {
+  await request.get('/post/page', {
+    title: form.value.keyword,
+    songName: form.value.songName,
+    artist: form.value.artist,
+    tags: form.value.tags,
+    sectionId: form.value.sectionId,
+    status: 1,
+    currentPage: currentPage.value,
+    size: size.value
+  }, {
+    showDefaultMsg: false,
+    onSuccess: (res) => { posts.value = res.records || []; total.value = res.total || 0 }
+  })
 }
 
-// 格式化日期
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  const now = new Date()
-  const diff = Math.floor((now - date) / 1000) // 秒数差
+const onPage = (p) => { currentPage.value = p; search() }
 
-  if (diff < 60) {
-    return "刚刚"
-  } else if (diff < 3600) {
-    return Math.floor(diff / 60) + "分钟前"
-  } else if (diff < 86400) {
-    return Math.floor(diff / 3600) + "小时前"
-  } else if (diff < 2592000) {
-    return Math.floor(diff / 86400) + "天前"
-  } else {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
-  }
-}
-
-// 格式化文件大小
-const formatFileSize = (bytes) => {
-  if (bytes === 0) return "0 B"
-  const k = 1024
-  const sizes = ["B", "KB", "MB", "GB", "TB"]
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
-}
-
-// 获取资源图标
-const getResourceIcon = (fileType) => {
-  if (fileType.includes('doc')) return 'Document'
-  if (fileType.includes('pdf')) return 'Tickets'
-  if (fileType.includes('jpg') || fileType.includes('png')) return 'Picture'
-  if (fileType.includes('mp4') || fileType.includes('avi')) return 'VideoPlay'
-  return 'Files'
-}
+onMounted(() => { loadSections(); search() })
 </script>
 
 <style scoped>
-.search-page {
-  min-height: 100vh;
-  background-color: #f6f8fa;
-  padding: 20px;
-}
-
-.search-header {
-  background: #fff;
-  padding: 20px 0;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.search-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.search-input {
-  margin-bottom: 16px;
-}
-
-.search-input :deep(.el-input__wrapper) {
-  border-radius: 12px;
-  padding: 4px 16px;
-}
-
-.search-options {
-  display: flex;
-  justify-content: center;
-}
-
-.search-results {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.result-section {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 24px;
-}
-
-.result-section h2 {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 20px;
-  color: #1a1a1a;
-}
-
-/* 帖子卡片样式 */
-.posts-list {
-  display: grid;
-  gap: 20px;
-}
-
-.post-card {
-  padding: 20px;
-  border-radius: 12px;
-  background: #f8f9fa;
-  transition: transform 0.2s;
-}
-
-.post-card:hover {
-  transform: translateY(-2px);
-}
-
-.post-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.post-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.author {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1a1a1a;
-}
-
-.time {
-  font-size: 12px;
-  color: #8c8c8c;
-}
-
-.post-content {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.post-content h3 {
-  font-size: 16px;
-  font-weight: 500;
-  color: #1a1a1a;
-  margin: 0 0 8px;
-}
-
-.post-content p {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.post-stats {
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
-  font-size: 13px;
-  color: #8c8c8c;
-}
-
-.post-stats span {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* 资源卡片样式 */
-.resources-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.resource-card {
-  padding: 20px;
-  border-radius: 12px;
-  background: #f8f9fa;
-  display: flex;
-  gap: 16px;
-  transition: transform 0.2s;
-}
-
-.resource-card:hover {
-  transform: translateY(-2px);
-}
-
-.resource-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: #e6f4ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #409EFF;
-}
-
-.resource-info {
-  flex: 1;
-}
-
-.resource-info h3 {
-  font-size: 15px;
-  font-weight: 500;
-  color: #1a1a1a;
-  margin: 0 0 4px;
-}
-
-.resource-info p {
-  font-size: 13px;
-  color: #666;
-  margin: 0 0 8px;
-}
-
-.resource-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #8c8c8c;
-}
-
-/* 分页样式 */
-.el-pagination {
-  margin-top: 20px;
-  justify-content: center;
-}
-
-@media (max-width: 768px) {
-  .search-page {
-    padding: 10px;
-  }
-
-  .search-container {
-    padding: 0 15px;
-  }
-
-  .search-results {
-    padding: 0 15px;
-  }
-
-  .result-section {
-    padding: 16px;
-  }
-
-  .resources-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style> 
+.search-page{max-width:1100px;margin:0 auto;padding:20px}.item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #eee;cursor:pointer}.cover{width:60px;height:60px;border-radius:8px;object-fit:cover}
+</style>

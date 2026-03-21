@@ -232,8 +232,7 @@ const getUserInfo = async () => {
 const getRoleName = (role) => {
   const roles = {
     1: '管理员',
-    2: '教师',
-    3: '学生'
+    2: '用户'
   }
   return roles[role] || '未知角色'
 }
