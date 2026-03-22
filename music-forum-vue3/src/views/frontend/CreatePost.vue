@@ -85,19 +85,22 @@ onMounted(loadSections)
   max-width: 920px;
   margin: 0 auto;
   padding: 24px;
-  border-radius: 14px;
-  background: linear-gradient(145deg, #0f172a, #1e293b);
-  color: #e5e7eb;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.25);
+  border-radius: 16px;
+  background: #ffffff;
+  color: #303133;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ebeef5;
 }
 
 .create-post-container h2 {
-  margin: 0 0 18px;
-  color: #f8fafc;
+  margin: 0 0 22px;
+  color: #303133;
+  font-size: 28px;
+  font-weight: 700;
 }
 
 .create-post-container :deep(.el-form-item__label) {
-  color: #e2e8f0;
+  color: #303133;
   font-weight: 600;
 }
 
@@ -106,6 +109,7 @@ onMounted(loadSections)
 .create-post-container :deep(.el-select__wrapper) {
   background: #ffffff;
   color: #111827;
+  box-shadow: 0 0 0 1px #dcdfe6 inset;
 }
 
 .create-post-container :deep(.el-input__inner),
@@ -113,8 +117,32 @@ onMounted(loadSections)
   color: #111827;
 }
 
+.create-post-container :deep(.el-select__placeholder),
+.create-post-container :deep(.el-input__count),
+.create-post-container :deep(.el-textarea__count) {
+  color: #909399;
+}
+
+.create-post-container :deep(.el-textarea__inner) {
+  background: #ffffff;
+}
+
 .create-post-container :deep(.el-input__inner::placeholder),
 .create-post-container :deep(.el-textarea__inner::placeholder) {
   color: #64748b;
+}
+
+.create-post-container :deep(.el-button + .el-button) {
+  margin-left: 12px;
+}
+
+@media (max-width: 768px) {
+  .create-post-container {
+    padding: 20px;
+  }
+
+  .create-post-container h2 {
+    font-size: 24px;
+  }
 }
 </style>
