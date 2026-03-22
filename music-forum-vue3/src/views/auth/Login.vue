@@ -43,6 +43,11 @@
               登录
             </el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button plain @click="handleGuestEnter" class="guest-button" size="large" round>
+              游客直接进入首页
+            </el-button>
+          </el-form-item>
         </el-form>
 
         <div class="register-link">
@@ -145,6 +150,12 @@ const handleLogin = async () => {
     loading.value = false
   }
 }
+
+const handleGuestEnter = () => {
+  router.push('/home').catch((error) => {
+    console.error('Guest entry failed:', error)
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -220,6 +231,10 @@ const handleLogin = async () => {
     width: 100%;
     background: linear-gradient(90deg, #4338ca, #2563eb);
     border: none;
+  }
+
+  .guest-button {
+    width: 100%;
   }
 
   .register-link {
